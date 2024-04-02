@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Student } from '../student';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StudentService } from '../student.service';
+import { Observable } from 'rxjs';
 
 
 
@@ -44,4 +45,9 @@ loadStudents(){
     });
   }
 
+  delete(student:Student){
+    this.service.delete(student).subscribe({
+      next: data => this.loadStudents()
+    });
+  }
 }
