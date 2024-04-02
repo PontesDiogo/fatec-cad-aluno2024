@@ -14,40 +14,56 @@ import { Observable } from 'rxjs';
 export class StudentsComponent {
 
   students: Student[] = [];
+  formGroupStudent: FormGroup;
+  isEditing: boolean = false;
 
-  formGroupStudent : FormGroup;
 
-
-ngOnInit():void{
+  ngOnInit(): void {
     this.loadStudents();
-}
-loadStudents(){
-  this.service.getStudents().subscribe({
-    next: data => this.students = data
-  });
-}
+  }
+  loadStudents() {
+    this.service.getStudents().subscribe({
+      next: data => this.students = data
+    });
+  }
 
 
   constructor(private formBuilder: FormBuilder,
-              private service: StudentService
-  ){
+    private service: StudentService
+  ) {
     this.formGroupStudent = formBuilder.group({
-        id : [''],
-        name : [''],
-        course : ['']
+      id: [''],
+      name: [''],
+      course: ['']
     });
 
   }
 
-  save(){
-    this.service.save(this.formGroupStudent.value).subscribe({
-      next: data => this.students.push(data)
-    });
+  save() {
+    if (this.isEditing) {
+      this.service.update(this.formGroupStudent.value).subscribe({
+        next: () => {
+          this.loadStudents();
+          this.isEditing = false; 
+        }
+      });
+    }
+    else {
+      this.service.save(this.formGroupStudent.value).subscribe({
+        next: data => this.students.push(data)
+        
+      });
+    }
+    this.formGroupStudent.reset();
   }
 
-  delete(student:Student){
+  delete(student: Student) {
     this.service.delete(student).subscribe({
       next: data => this.loadStudents()
     });
+  }
+  edit(student: Student) {
+    this.formGroupStudent.setValue(student);
+    this.isEditing = true;
   }
 }

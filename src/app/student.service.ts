@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Student } from './student';
 import { Observable } from 'rxjs';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,9 @@ url = "http://localhost:3000/students"
   }
   delete(student:Student): Observable<void>{ 
     return this.http.delete<void>(`${this.url}/${student.id}`);
+  }
+  update(student: Student): Observable<Student>{
+    return this.http.put<Student>(`${this.url}/${student.id}`,student);
   }
 
 

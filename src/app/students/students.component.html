@@ -44,7 +44,9 @@
               <td>{{student.course}}</td>
               <td>
                 <button type="button" class="btn btn-danger " (click)="delete(student)">Remover</button>
-                <button type="button" class="btn btn-primary">Alterar</button>
+                <button type="button" class="btn btn-primary"
+                (click)="edit(student)" 
+                >Alterar</button>
               </td>
             </tr>
           </tbody>
